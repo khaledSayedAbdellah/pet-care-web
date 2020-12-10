@@ -5,6 +5,7 @@ import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 import { Link } from 'react-router-dom';
 import AuthVetService from "../services/auth.doctor.service";
+import axios from "axios";
 
 const required = value => {
   if (!value) {
@@ -37,14 +38,14 @@ const vname = value => {
 };
 
 const vaddress = value => {
-    if (value.length < 3 || value.length > 50) {
-      return (
-        <div className="alert alert-danger" role="alert">
-          The address must be between 3 and 50 characters.
-        </div>
-      );
-    }
-  };
+  if (value.length < 3 || value.length > 50) {
+    return (
+      <div className="alert alert-danger" role="alert">
+        The address must be between 3 and 50 characters.
+      </div>
+    );
+  }
+};
 
 
 const vpassword = value => {
@@ -56,7 +57,7 @@ const vpassword = value => {
     );
   }
 };
-const str= RegExp(/(01)[0-9]{9}$/);
+const str = RegExp(/(01)[0-9]{9}$/);
 const vmobile = value => {
   if (!(str.test(value))) {
     return (
@@ -76,19 +77,69 @@ export default class RegisterVet extends Component {
     this.onChangeCoPassword = this.onChangeCoPassword.bind(this);
     this.onChangeAddress = this.onChangeAddress.bind(this);
     this.onChangeMobile = this.onChangeMobile.bind(this);
+    this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
 
     this.state = {
       name: "",
       email: "",
-      address:"",
+      address: "",
       password: "",
-      confirmPassword:'',
-      mobile:'',
+      confirmPassword: '',
+      mobile: '',
       successful: false,
-      message: ""
-    };
+      message: "",
+      checkCount:0,
+      services: [],
+      doctorsServices:[]
+    }
   }
-
+  async componentDidMount(){
+    let { data } = await axios.get(
+      "https://pet-care-iti.herokuapp.com/api/services"
+    );
+   
+    this.setState({ services: data.data });
+  }
+  handleCheckboxChange=(event)=>{
+    let newArray = [...this.state.doctorsServices, event.target.id];
+    if (this.state.doctorsServices.includes(event.target.id)) {
+      newArray = newArray.filter(service => service !== event.target.id);
+    } 
+    this.setState({
+      doctorsServices: newArray
+    });
+    console.log(this.state.doctorsServices)
+  }
+  renderService({services}){
+    if(services && services.length){
+     return services.map((service) => {
+        return (
+          <div className="mx-3 my-1">
+            <input
+              key={service._id}
+              type="checkbox"
+              id={service._id}
+              name={service.title}
+              onChange={this.handleCheckboxChange}
+              // onChange={(e)=>{
+              //   console.log(e.target.name)
+              //   // console.log(e.target)
+              //   // console.log(this.state.services)
+              //   if (e.target.checked)
+              //   this.setState((prevState) => ({checkCount: prevState.checkCount + 1, checkboxValid: true}))
+              // else {
+              //   this.setState((prevState) => ({checkCount: prevState.checkCount - 1}), () => {
+              //     if (this.state.checkCount === 0)
+              //       this.setState({checkboxValid: false})
+              //   })
+              // }
+              // }}
+            />
+            <label htmlFor={service.title} className="ml-1">{service.title}</label>
+          </div>
+        )
+      })}
+    }
   onChangename(e) {
     this.setState({
       name: e.target.value
@@ -130,14 +181,15 @@ export default class RegisterVet extends Component {
     });
 
     this.form.validateAll();
-console.log(this.state.address)
-console.log(this.state.password)
+    console.log(this.state.address)
+    console.log(this.state.password)
     if (this.checkBtn.context._errors.length === 0) {
       AuthVetService.register(
         this.state.name,
         this.state.email,
         this.state.password,
-        this.state.address
+        this.state.address,
+        this.state.doctorsServices
       ).then(
         response => {
           this.setState({
@@ -164,6 +216,7 @@ console.log(this.state.password)
 
   render() {
     return (
+      <div className="container">
       <div className="col-md-8 col-sm-10 mx-auto mt-5 my-5">
 
         <div className="card">
@@ -178,8 +231,10 @@ console.log(this.state.password)
             {!this.state.successful && (
               <div>
                 <div className="form-group">
-                  <label htmlFor="name">Name</label>
+                  
                   <Input
+                   placeholder="Enter Your Name"
+
                     type="text"
                     className="form-control"
                     name="name"
@@ -190,8 +245,10 @@ console.log(this.state.password)
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="email">Email</label>
+                
                   <Input
+              placeholder="Enter Your Email"
+
                     type="text"
                     className="form-control"
                     name="email"
@@ -202,8 +259,9 @@ console.log(this.state.password)
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="password">Password</label>
+                 
                   <Input
+                   placeholder="Enter Your Password"
                     type="password"
                     className="form-control"
                     name="password"
@@ -213,8 +271,10 @@ console.log(this.state.password)
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="copassword">Confirm Password</label>
+                  
                   <Input
+                   placeholder="Confirm Your Password"
+
                     type="password"
                     className="form-control"
                     name="copassword"
@@ -223,15 +283,16 @@ console.log(this.state.password)
                     validations={[required]}
                   />
                   {this.state.password !== this.state.confirmPassword && (
-                <div className="alert alert-danger" role="alert">
-                  Passwords don't match
-                </div>
-              )}
+                    <div className="alert alert-danger" role="alert">
+                      Passwords don't match
+                    </div>
+                  )}
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="address">Address</label>
+                 
                   <Input
+                     placeholder="Enter Your Address"
                     type="text"
                     className="form-control"
                     name="address"
@@ -241,8 +302,9 @@ console.log(this.state.password)
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="mobile">Mobile</label>
+                 
                   <Input
+                  placeholder="Enter Your Mobile"
                     type="text"
                     className="form-control"
                     name="mobile"
@@ -251,6 +313,15 @@ console.log(this.state.password)
                     validations={[vmobile]}
                   />
                 </div>
+                <div className="form-group pt-3">
+                  <h5 className="text-center font-weight-normal mr-5">Services</h5>
+                  <div className="d-flex flex-wrap">
+                   {this.renderService(this.state)}
+                  </div>
+                </div>
+
+
+
                 <div className="form-group">
                   <button className="btn btn-outline">Sign Up</button>
                 </div>
@@ -277,7 +348,7 @@ console.log(this.state.password)
                 this.checkBtn = c;
               }}
             />
-                <div className="login-or">
+            <div className="login-or">
               <hr className="hr-or"></hr>
               <span className="span-or">or</span>
             </div>
@@ -287,9 +358,11 @@ console.log(this.state.password)
                 Login here
                   </Link>
             </h5>
+            <h5 className="text-center my-2">  <Link to="/register"  className="text-muted ">Register as a User
+            </Link ></h5>
           </Form>
         </div>
-      </div>
+      </div></div>
     );
   }
 }

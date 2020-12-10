@@ -102,6 +102,7 @@ export default class Login extends Component {
 
   render() {
     return (
+      <div className="container">
       <div className="col-md-8 col-sm-10 mx-auto mt-5 my-5">
         <div className="card">
         <h2 className="text-center mt-4">Login</h2>
@@ -112,8 +113,9 @@ export default class Login extends Component {
             }}
           >
             <div className="form-group">
-              <label htmlFor="email">Email</label>
+             
               <Input
+              placeholder="Enter Your Email"
                 type="text"
                 className="form-control"
                 name="email"
@@ -124,8 +126,9 @@ export default class Login extends Component {
             </div>
 
             <div className="form-group">
-              <label htmlFor="password">Password</label>
+              
               <Input
+            placeholder="Enter Your Password"
                 type="password"
                 className="form-control"
                 name="password"
@@ -172,9 +175,11 @@ export default class Login extends Component {
                   &nbsp;  Signup here
                 </Link>
             </h5>
+            <h5 className="text-center my-2">  <Link to="/login/doctor"  className="text-muted ">Login as a Vet
+            </Link ></h5>
           </Form>
         </div>
-      </div>
+      </div></div>
     );
   }
 }

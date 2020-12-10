@@ -166,6 +166,7 @@ export default class Register extends Component {
 
   render() {
     return (
+      <div className="container">
       <div className="col-md-8 col-sm-10 mx-auto mt-5 my-5">
 
         <div className="card">
@@ -180,8 +181,10 @@ export default class Register extends Component {
             {!this.state.successful && (
               <div>
                 <div className="form-group">
-                  <label htmlFor="name">Name</label>
+                 
                   <Input
+              placeholder="Enter Your Name"
+
                     type="text"
                     className="form-control"
                     name="name"
@@ -192,8 +195,10 @@ export default class Register extends Component {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="email">Email</label>
+                  
                   <Input
+              placeholder="Enter Your Email"
+
                     type="text"
                     className="form-control"
                     name="email"
@@ -204,8 +209,10 @@ export default class Register extends Component {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="password">Password</label>
+                
                   <Input
+              placeholder="Enter Your Password"
+
                     type="password"
                     className="form-control"
                     name="password"
@@ -215,8 +222,10 @@ export default class Register extends Component {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="copassword">Confirm Password</label>
+                 
                   <Input
+              placeholder="Confirm Your Password"
+
                     type="password"
                     className="form-control"
                     name="copassword"
@@ -232,8 +241,10 @@ export default class Register extends Component {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="address">Address</label>
+                
                   <Input
+              placeholder="Enter Your Address"
+
                     type="text"
                     className="form-control"
                     name="address"
@@ -243,8 +254,10 @@ export default class Register extends Component {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="mobile">Mobile</label>
+                
                   <Input
+              placeholder="Enter Your Mobile"
+
                     type="text"
                     className="form-control"
                     name="mobile"
@@ -290,9 +303,11 @@ export default class Register extends Component {
                 Login here
                   </Link>
             </h5>
+            <h5 className="text-center my-2">  <Link to="/register/doctor"  className="text-muted ">Register as a Vet</Link ></h5>
+          
           </Form>
         </div>
-      </div>
+      </div></div>
     );
   }
 }

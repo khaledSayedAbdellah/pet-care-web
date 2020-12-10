@@ -21,15 +21,16 @@ class AuthVetService {
   logout() {
     localStorage.removeItem('doctor');
   }
-
-  register(name, email, password,address) {
+  
+  register(name, email, password,address,doctorsServices) {
   console.log(address)
   console.log(password)
     return axios.post(API_URL + "api/doctors/signup", {
       name,
       email,
       password,
-      address
+      address,
+      doctorsServices
     });
 
   }

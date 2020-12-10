@@ -103,6 +103,7 @@ export default class LoginVet extends Component {
 
   render() {
     return (
+      <div className="container">
       <div className="col-md-8 col-sm-10 mx-auto mt-5 my-5">
         <div className="card">
         <h2 className="text-center mt-4">Vet Login</h2>
@@ -113,8 +114,10 @@ export default class LoginVet extends Component {
             }}
           >
             <div className="form-group">
-              <label htmlFor="email">Email</label>
+             
               <Input
+              placeholder="Enter Your Email"
+
                 type="text"
                 className="form-control"
                 name="email"
@@ -125,8 +128,10 @@ export default class LoginVet extends Component {
             </div>
 
             <div className="form-group">
-              <label htmlFor="password">Password</label>
+              
               <Input
+              placeholder="Enter Your Password"
+
                 type="password"
                 className="form-control"
                 name="password"
@@ -169,13 +174,15 @@ export default class LoginVet extends Component {
         
             <h5 className="text-muted text-center">
                 Don't have account?
-                <Link to="/register" className="custom-color">
+                <Link to="/register/doctor" className="custom-color">
                 &nbsp;  Sign up here
                 </Link>
             </h5>
+            <h5 className="text-center my-2">  <Link to="/login"  className="text-muted ">Login as a User
+            </Link ></h5>
           </Form>
         </div>
-      </div>
+      </div></div>
     );
   }
 }

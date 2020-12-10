@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import AuthService from "../services/auth.service";
+import Home from './home.component';
 
 export default class Profile extends Component {
   constructor(props) {
@@ -16,12 +17,12 @@ export default class Profile extends Component {
 // console.log(currentUser)
     return (
       <div className="container">
-        <header className="jumbotron">
-          <h3>
-            <strong className="text-info">{currentUser.data.name}</strong> Profile
+        
+          <h3 className="text-center py-2">
+            <strong>Welcome {currentUser.data.name}!</strong> 
           </h3>
-        </header>
-        <p>
+        <Home/>
+        {/* <p>
           <strong>User Token:</strong>{" "}
          {currentUser.token}
         </p>
@@ -33,7 +34,7 @@ export default class Profile extends Component {
         <p>
           <strong>Email:</strong>{" "}
           {currentUser.data.email}
-        </p>
+        </p> */}
    
       </div>
     );
