@@ -6,7 +6,7 @@ import {
   faPaw,
   faPhoneAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // const star = {
 //     size: 20,
@@ -31,7 +31,7 @@ let raters = Math.floor((Math.random() * 300) + 1);
 
 
 const star = {
-  size: 40,
+  size: 30,
   count: 5,
   isHalf: true,
   value: 4,
@@ -47,78 +47,85 @@ const star = {
 const Card = ({ doctor }) =>
   doctor.services.length > 0 ? (
     <div className="docCard">
-    <Link  to={`/docInfo/${doctor._id}`}>
-    <div className="card ml-2 px-4 mb-4 p-4  ">
-      <div className="">
-        <div className="d-flex d-inline ">
-          <img
-            className="alignself-start mr-3"
-            src="https://abingdonsquarevet.com/wp-content/uploads/2019/12/Dr-Brett-Shorenstein-web.png?x42674"
-            alt=""
-            style={{ height: "180px", borderRadius: "50%" }}
-          />
+      <Link to={`/docInfo/${doctor._id}`}>
+        <div className="card ml-2 px-4 mb-4 p-4 ">
           <div className="row">
-            <div className="ml-4 col" style={{ marginLeft: "20px" }}>
-              <h5 className="mt-1">
-                {" "}
-                <strong> Dr/ {doctor.name}</strong>
-              </h5>
-              <ul style={{ marginTop: "20px" }}>
-                <li className="text-dark">
-                  <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" />
-                  {doctor.address}
-                </li>
-                <li className="text-dark mt-3">
-                  <FontAwesomeIcon icon={faPhoneAlt} className="mr-2" />
-                  {doctor.phone}
-                </li>
+            <div className="col-md-4 col-sm-12"
+            >
+              <img
+                className="doctor-card-img mr-3"
+                src="https://abingdonsquarevet.com/wp-content/uploads/2019/12/Dr-Brett-Shorenstein-web.png?x42674"
+                alt=""
 
-                <div className="App mt-4">
-                  <ReactStars {...star} />
-                  <p className="text-dark" style={{ fontSize: "13px" }}>
-                    Overall Rating from <strong>{raters} </strong>Users
+              /> </div><div className="col-md-7">
+              
+                  <div className="ml-4 text-dark mt-2" >
+                    <h3 >Dr/ {doctor.name}</h3>
+                    <div className="row">
+                <div className="col-md-7">
+                    <ul className="ml-4">
+                      <li className="text-dark">
+                        <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" />
+                        {doctor.address}
+                      </li>
+                      <li className="text-dark mt-3">
+                        <FontAwesomeIcon icon={faPhoneAlt} className="mr-2" />
+                        {doctor.phone}
+                      </li>
+                      <li>
+                        <div className="App">
+                          <ReactStars {...star} />
+                          <p className="text-dark" style={{ fontSize: "13px" }}>
+                            Overall Rating from <strong>{raters} </strong>Users
                   </p>
-                </div>
-              </ul>
-            </div>
-          </div>
-
-          <div className="text-dark col">
-            <span>
-              {" "}
-              <strong style={{ marginLeft: "30px" }}>
-                <FontAwesomeIcon icon={faPaw} className="mr-2 mt-5" />
+                        </div>
+                      </li>
+                    </ul>
+                    </div>
+                
+                <div className="col-md-5">
+                <div className="text-dark">
+                <span>
+                  {" "}
+                  <strong >
+                    <FontAwesomeIcon icon={faPaw} className="mr-2" />
                 Services
               </strong>
-            </span>
-            <div className="text-dark  ">
-              {doctor.services && (
-                <div style={{ marginLeft: "30px" }}>
-                  {doctor.services.map((service) => {
-                    return (
-                      <div className="m-3 d-flex flex-wrap">
-                        <img
-                          src={`${service.image}`}
-                          alt=""
-                          style={{ height: "30px", width: "30px" }}
-                        />
-                        <p className="m-2 ">{service.title}</p>
-                      </div>
-                    );
-                  })}
+                </span>
+                <div className="text-dark  ">
+                  {doctor.services && (
+                    <div>
+                      {doctor.services.map((service) => {
+                        return (
+                          <div className=" d-flex ">
+                            <img
+                            className="mt-2"
+                              src={`${service.image}`}
+                              alt="service"
+                              style={{ height: "25px", width: "25px" }}
+                            />
+                            <p className="m-2 ">{service.title}</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
+
+                </div></div>
+              </div>
+
+
+            
+
             </div>
           </div>
-
-          
         </div>
-      </div>
-    </div>
-    </Link>
+      </Link>
     </div>
   ) : (
-    ""
-  );
+      ""
+    );
 
 export default Card;

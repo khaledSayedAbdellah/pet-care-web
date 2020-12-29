@@ -5,6 +5,7 @@ import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 import { Link } from 'react-router-dom';
 import AuthVetService from "../services/auth.doctor.service";
+// import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
 import axios from "axios";
 
 const required = value => {
@@ -67,6 +68,16 @@ const vmobile = value => {
     );
   }
 };
+
+const vServices = value =>{
+  if(value.length<1){
+    return (
+      <div className="alert alert-danger" role="alert">
+        You must Select one service at least
+      </div>
+    );
+  }
+}
 export default class RegisterVet extends Component {
   constructor(props) {
     super(props);
@@ -97,18 +108,26 @@ export default class RegisterVet extends Component {
     let { data } = await axios.get(
       "https://pet-care-iti.herokuapp.com/api/services"
     );
-   
     this.setState({ services: data.data });
+    // console.log(this.state.services)
+  }
+  componentDidUpdate(){
+    // console.log(this.state.doctorsServices)
+
+    // this.setState()
+    // console.log(this.state.doctorsServices)
+
   }
   handleCheckboxChange=(event)=>{
+    // console.log(event.target)
     let newArray = [...this.state.doctorsServices, event.target.id];
+    
     if (this.state.doctorsServices.includes(event.target.id)) {
-      newArray = newArray.filter(service => service !== event.target.id);
-    } 
-    this.setState({
-      doctorsServices: newArray
-    });
-    console.log(this.state.doctorsServices)
+      newArray = newArray.filter(service => service === !event.target.id);
+    }
+    // console.log(newArray)
+    this.setState({ doctorsServices: newArray });
+    // console.log(this.state.doctorsServices)
   }
   renderService({services}){
     if(services && services.length){
@@ -116,26 +135,15 @@ export default class RegisterVet extends Component {
         return (
           <div className="mx-3 my-1">
             <input
+              image={service.image}
               key={service._id}
               type="checkbox"
               id={service._id}
               name={service.title}
               onChange={this.handleCheckboxChange}
-              // onChange={(e)=>{
-              //   console.log(e.target.name)
-              //   // console.log(e.target)
-              //   // console.log(this.state.services)
-              //   if (e.target.checked)
-              //   this.setState((prevState) => ({checkCount: prevState.checkCount + 1, checkboxValid: true}))
-              // else {
-              //   this.setState((prevState) => ({checkCount: prevState.checkCount - 1}), () => {
-              //     if (this.state.checkCount === 0)
-              //       this.setState({checkboxValid: false})
-              //   })
-              // }
-              // }}
+              validations={[vServices,required]}
             />
-            <label htmlFor={service.title} className="ml-1">{service.title}</label>
+            <label htmlFor={service._id} className="ml-1">{service.title}</label>
           </div>
         )
       })}
@@ -189,6 +197,7 @@ export default class RegisterVet extends Component {
         this.state.email,
         this.state.password,
         this.state.address,
+        this.state.mobile,
         this.state.doctorsServices
       ).then(
         response => {
@@ -215,6 +224,7 @@ export default class RegisterVet extends Component {
   }
 
   render() {
+    console.log(this.state.doctorsServices)
     return (
       <div className="container">
       <div className="col-md-8 col-sm-10 mx-auto mt-5 my-5">

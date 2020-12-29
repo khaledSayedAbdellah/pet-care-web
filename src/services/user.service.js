@@ -1,25 +1,27 @@
 import axios from 'axios';
-import authHeader from './auth-header';
+
 
 const API_URL = 'https://pet-care-iti.herokuapp.com/';
 
 class UserService {
-//   getPublicContent() {
-//     return axios.get(API_URL + 'all');
-//   }
+  // API='https://pet-care-iti.herokuapp.com/api/doctors'
+  getPublicContent() {
+    return axios.get(API_URL + 'all');
+  }
 
 getUserBoard() {
-  return axios.get(API_URL + 'user', { headers: authHeader() });
-
+  return axios.get(API_URL + 'user', { headers: getUserToken = () => {
+    if (localStorage.getItem('user'))
+      return JSON.parse(localStorage.getItem('user')).token
+  } });
 }
 
-//   getModeratorBoard() {
-//     return axios.get(API_URL + 'doctor', { headers: authHeader() });
-//   }
-
-//   getAdminBoard() {
-//     return axios.get(API_URL + 'admin', { headers: authHeader() });
-//   }
+  getAdminBoard() {
+    return axios.get(API_URL + 'doctor', { headers: getUserToken = () => {
+      if (localStorage.getItem('doctor'))
+        return JSON.parse(localStorage.getItem('doctor')).token
+    } });
+  }
 }
 
 export default new UserService();

@@ -22,15 +22,14 @@ class AuthVetService {
     localStorage.removeItem('doctor');
   }
   
-  register(name, email, password,address,doctorsServices) {
-  console.log(address)
-  console.log(password)
+  register(name, email, password,address,phone,services) {
     return axios.post(API_URL + "api/doctors/signup", {
       name,
       email,
       password,
       address,
-      doctorsServices
+      phone,
+      services
     });
 
   }
@@ -38,6 +37,7 @@ class AuthVetService {
   getCurrentDoctor() {
     return JSON.parse(localStorage.getItem('doctor'));;
   }
+  
 }
 
 export default new AuthVetService();

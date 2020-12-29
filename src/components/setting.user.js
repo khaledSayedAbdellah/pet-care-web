@@ -1,54 +1,61 @@
 import React, { Component } from 'react';
 import axios from "axios";
 
+import AuthService from "../services/auth.service";
+const API_URL = "https://pet-care-iti.herokuapp.com/api/users";
 
-
-
-const API_URL = "https://pet-care-iti.herokuapp.com/api/doctors";
-class Settings extends Component {
+class SettingsUser extends Component {
     constructor(props) {
         super(props);
+        this.onSubmitHandle = this.onSubmitHandle.bind(this);
         this.state = {
-            name: this.props.Doctor.name,
-            password: this.props.Doctor.password,
-            address: this.props.Doctor.address,
-            email: this.props.Doctor.email,
-            phone:this.props.Doctor.phone
+            currentUser: AuthService.getCurrentUser(),
+            name: this.props.User.name,
+            email: this.props.User.email,
+            address: this.props.User.address,
+            phone: this.props.User.phone,
+            password: this.props.User.password,
+            // name: '',
+            // email: '',
+            // address: '',
+            // phone: '',
+            // password: '',
+
         }
     }
-    componentDidMount() {
-        this.setState({ state: this.props.Doctor})
-        console.log(this.state.doctor)
-    }
+       
 
     Change = (e) => {
-
+       
         this.setState({ [e.target.name]: e.target.value })
     }
-    onSubmitHandle = (e) => {
+    onSubmitHandle(e) {
         e.preventDefault();
-        const obj = { ...this.state }
-        console.log(obj)
          axios.patch(
-            API_URL, obj,
+            API_URL,
+            {
+                name: this.state.name,
+                email: this.state.email,
+                address: this.state.address,
+                phone: this.state.phone,
+                password: this.state.password,
+            },
             {
                 headers: {
-                    Authorization: this.props.doctorToken,
+                    Authorization: this.props.UserToken,
                 },
             }
         )
         console.log(e)
-        this.setState({state:obj})
-        console.log(this.state)
+        this.setState()
     }
-
+    
     render() {
-        console.log(this.props.Doctor)
-        console.log(this.state)
+       console.log(this.props)
         return (
             <div>
-
-                <div className="pb-4 px-4">
+                <div className="container">
+                <div className="card p-5  offset-sm-2 col-sm-8">
                     <h3 className="text-dark pb-4">Edit Information</h3>
                     <form onSubmit={this.onSubmitHandle}>
                         <div className="form-group d-flex pb-3 mb-5">
@@ -60,8 +67,8 @@ class Settings extends Component {
                             <input type="file" className="form-control-file mt-auto" id="exampleFormControlFile1" />
                         </div>
                         <div className="form-group row">
-                            <label htmlFor="inputEmail1" className="col-sm-2 col-form-label">Name</label>
-                            <div className="col-sm-10">
+                            <label htmlFor="inputEmail1" className="col-sm-3 col-form-label">Name</label>
+                            <div className="col-sm-9">
                                 <input
                                     onChange={this.Change}
                                     name='name'
@@ -74,8 +81,8 @@ class Settings extends Component {
                         </div>
 
                         <div className="form-group row">
-                            <label htmlFor="inputEmail2" className="col-sm-2 col-form-label">Email</label>
-                            <div className="col-sm-10">
+                            <label htmlFor="inputEmail2" className="col-sm-3 col-form-label">Email</label>
+                            <div className="col-sm-9">
                                 <input
                                     onChange={this.Change}
                                     name='email'
@@ -87,8 +94,8 @@ class Settings extends Component {
                             </div>
                         </div>
                         <div className="form-group row">
-                            <label htmlFor="inputEmail3" className="col-sm-2 col-form-label">Password</label>
-                            <div className="col-sm-10">
+                            <label htmlFor="inputEmail3" className="col-sm-3 col-form-label">Password</label>
+                            <div className="col-sm-9">
                                 <input
                                     onChange={this.Change}
                                     type="password"
@@ -100,8 +107,8 @@ class Settings extends Component {
                             </div>
                         </div>
                         <div className="form-group row">
-                            <label htmlFor="inputEmail4" className="col-sm-2 col-form-label">Address</label>
-                            <div className="col-sm-10">
+                            <label htmlFor="inputEmail4" className="col-sm-3 col-form-label">Address</label>
+                            <div className="col-sm-9">
                                 <input
                                     onChange={this.Change}
                                     name='address'
@@ -113,8 +120,8 @@ class Settings extends Component {
                             </div>
                         </div>
                         <div className="form-group row">
-                            <label htmlFor="inputEmail5" className="col-sm-2 col-form-label">Mobile</label>
-                            <div className="col-sm-10">
+                            <label htmlFor="inputEmail5" className="col-sm-3 col-form-label">Mobile</label>
+                            <div className="col-sm-9">
                                 <input
                                     onChange={this.Change}
                                     name='phone'
@@ -125,19 +132,7 @@ class Settings extends Component {
                                 />
                             </div>
                         </div>
-                        {/* <div className="form-group row">
-                            <label htmlFor="inputEmail6" className="col-sm-2 col-form-label">Services</label>
-                            <div className="col-sm-10">
-                                <Select
-                                    id="inputEmail6"
-                                    closeMenuOnSelect={true}
-                                    components={animatedComponents}
-                                    isMulti
-                                    placeholder={'Choose Services ...'}
-                                    options={this.state.options}
-                                />
-                            </div>
-                        </div> */}
+            
                         <div className="form-group d-flex pr-1 my-2">
                             <button type="submit" className="btn btn-outline-secondary px-4 ml-auto my-3 ">cancel</button>
                             <button type="submit" className="btn btn-secondary px-5 my-3 ml-3">Save</button>
@@ -150,10 +145,10 @@ class Settings extends Component {
 
 
 
-            </div>
+            </div></div>
 
         );
     }
 }
 
-export default Settings;
+export default SettingsUser;

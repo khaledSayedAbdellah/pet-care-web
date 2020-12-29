@@ -2,27 +2,117 @@ import React, { Component } from "react";
 import AuthVetService from "../services/auth.doctor.service";
 import { Link, Route } from "react-router-dom";
 import Settings from "./setting.doctor";
-
+import Schedule from './schedule.doctor';
 import Services from './services.doctor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarAlt, faCog, faPaw } from '@fortawesome/free-solid-svg-icons'
-import Schedule from './schedule.doctor';
+import axios from "axios";
 
+
+
+
+const API_URL = 'https://pet-care-iti.herokuapp.com/api/doctors/servicses';
 export default class VetProfile extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      currentVet: AuthVetService.getCurrentDoctor()
+      currentVet: AuthVetService.getCurrentDoctor(),
+      availableServices:[],
+      checked:[false,false,false,false,false,false,false],
     };
   }
 
+
+componentDidMount(){
+  this.setState({availableServices:this.state.currentVet.data.services.map((service)=>{return service._id})}) 
+  console.log(this.state.currentVet.data.services)
+  console.log(this.state.availableServices)
+  if(this.state.availableServices){
+    // this.setState({...this.state,checked:true})
+
+  }
+   
+
+
+
+}
+
+
+
+  onChangeChecked=(e)=>{
+    this.setState({checked:e.target.checked})
+    console.log(e.target.id)
+    if(this.state.availableServices.includes(e.target.id)){
+       axios.patch(
+        
+        API_URL,
+        {serviceId:e.target.id,
+          status:-1},
+        {
+          headers: {
+          Authorization: this.state.currentVet.token,
+          },
+        }
+      )
+      .then((x)=>{console.log(x)})
+     
+      // this.setState({...this.state})
+    console.log('checked')
+    console.log(this.state.availableServices)
+    }else{
+      let y =  axios.patch(
+        API_URL,
+        {serviceId:e.target.id,
+          status:1},
+        {
+          headers: {
+          Authorization: this.state.currentVet.token,
+          },
+        }
+      )
+      console.log(y)
+      // this.setState({...this.state})
+      // console.log('no checked')
+      
+    }
+  console.log(this.state.availableServices)
+  // console.log('hamada')
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   render() {
     const { currentVet } = this.state;
+    // console.log(currentVet.token)
+  console.log(this.state.availableServices)
+
+    // console.log(currentVet.data)
+    // console.log(currentVet.data.services)
     return (
       <React.Fragment>
-        <div className="container">
+        <div className="container mt-3">
           <div className="row">
-            <div className="col-4 d-flex flex-column align-items-center py-5 align-self-start">
+            <div className="col-lg-4 col-md-5 d-flex flex-column align-items-center py-5 align-self-start">
               <img
                 src="https://cdn1.iconfinder.com/data/icons/avatars-1-5/136/87-512.png"
                 alt=""
@@ -32,19 +122,19 @@ export default class VetProfile extends Component {
               {/* <h5 className="mb-3"> {currentVet.data.email}</h5> */}
               <ul className="nav d-flex flex-column align-content-between m-auto doctor-ul">
                 <li className="nav-item w-100 align-self-center">
-                  <Link to="/profile/doctor/settings" className="row nav-link d-flex">
+                  <Link to="/vet/settings" className="row nav-link d-flex">
                     <FontAwesomeIcon icon={faCog} className="m-1 mr-3" />
                     <p>Settings</p>
                   </Link>
                 </li>
                 <li className="nav-item align-content-between">
-                  <Link to="/profile/doctor/schedule" className="row nav-link d-flex">
+                  <Link to="/vet/schedule" className="row nav-link d-flex">
                     <FontAwesomeIcon icon={faCalendarAlt} className="m-1 mr-3" />
                     <p>Schedule</p>
                   </Link>
                 </li>
                 <li className="nav-item align-content-between">
-                  <Link to="/profile/doctor/services" className="row nav-link d-flex">
+                  <Link to="/vet/services" className="row nav-link d-flex">
 
                     <FontAwesomeIcon icon={faPaw} className="m-1 mr-3" />
                     <p>Services</p>
@@ -54,12 +144,30 @@ export default class VetProfile extends Component {
                 </li>
               </ul>
             </div>
-            <div className="col border">
+            <div className="col-lg-8 col-md-7 border">
               <h3 className="text-center py-4 mb-3">Doctor Dashboard</h3>
 
-              <Route path="/profile/doctor/settings" component={Settings} />
-              <Route path="/profile/doctor/schedule" component={Schedule} />
-              <Route path="/profile/doctor/services" component={Services} />
+
+              <Route exact path="/vet/settings" render={
+                ()=>{
+                return <Settings Doctor={currentVet.data} doctorToken={currentVet.token} history={this.props}/>
+              }} />
+              <Route exact path="/vet/schedule" render={
+                ()=>{
+                return  <Schedule  doctorToken={currentVet.token} />
+                }
+              }/>
+              <Route exact path="/vet/services"
+              render={()=>{
+                console.log(this.state.checked)
+                return <Services 
+                onChecked={this.state.checked}
+                onChangeChecked={this.onChangeChecked}
+                ServiceIDs={this.state.availableServices}
+                
+                />
+              }}/>
+               
             </div>
           </div>
         </div>

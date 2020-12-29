@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import AuthService from "../services/auth.service";
 import Home from './home.component';
+import SettingsUser from './setting.user';
+import Reservations from './user.reservations';
+import { Route} from "react-router-dom";
+
+
 
 export default class Profile extends Component {
   constructor(props) {
@@ -13,30 +18,28 @@ export default class Profile extends Component {
   }
 
   render() {
+    
     const { currentUser } = this.state;
-// console.log(currentUser)
-    return (
+    // console.log(currentUser.data)
+    // console.log(currentUser.token)
+    return ( <React.Fragment>
       <div className="container">
+       
+          <Route exact path={"/profile"} render={()=>{
+          return  <Home/> 
+          }}/>
+
+          <Route path={"/profile/settings"} render={()=>{
+            return <SettingsUser User={currentUser.data} UserToken={currentUser.token}/>
+          }} />
+          <Route path={"/profile/reservations"} render={()=>{
+            return <Reservations UserToken={currentUser.token} />
+          }} />
         
-          <h3 className="text-center py-2">
-            <strong>Welcome {currentUser.data.name}!</strong> 
-          </h3>
-        <Home/>
-        {/* <p>
-          <strong>User Token:</strong>{" "}
-         {currentUser.token}
-        </p>
-        <p>
-          <strong>Address:</strong>{" "}
-          {currentUser.data.address}
-          {console.log(currentUser.data.address)}
-        </p>
-        <p>
-          <strong>Email:</strong>{" "}
-          {currentUser.data.email}
-        </p> */}
    
       </div>
+      
+      </React.Fragment>
     );
 }
 }

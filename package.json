@@ -5,8 +5,12 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
+    "@fortawesome/free-brands-svg-icons": "^5.15.1",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/react-fontawesome": "^0.1.13",
+    "@syncfusion/ej2-layouts": "^18.3.53",
+    "@syncfusion/ej2-react-calendars": "^18.3.53",
+    "@syncfusion/ej2-react-dropdowns": "^18.3.53",
     "@syncfusion/ej2-react-schedule": "^18.3.51",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.1",

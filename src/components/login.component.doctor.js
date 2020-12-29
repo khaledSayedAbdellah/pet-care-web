@@ -77,7 +77,7 @@ export default class LoginVet extends Component {
     if (this.checkBtn.context._errors.length === 0) {
       AuthVetService.login(this.state.email, this.state.password).then(
         () => {
-          this.props.history.push("/profile/doctor");
+          this.props.history.push("/vet/settings");
           window.location.reload();
         },
         error => {
@@ -174,7 +174,7 @@ export default class LoginVet extends Component {
         
             <h5 className="text-muted text-center">
                 Don't have account?
-                <Link to="/register/doctor" className="custom-color">
+                <Link to="/register" className="custom-color">
                 &nbsp;  Sign up here
                 </Link>
             </h5>

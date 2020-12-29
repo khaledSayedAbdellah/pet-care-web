@@ -20,16 +20,25 @@ import VetProfile from './components/profile.doctor.component';
 import NavBar from "./components/nav";
 import Footer from "./components/footer";
 import MainHome from './components/main-home';
+import FilteredDoctors from './components/filltered.doctors';
 import Docinfo from './components/doc-info';
+import Cats from './staticPages/cats';
+import Dogs from './staticPages/dogs';
+import Brids from './staticPages/brids';
+import Estates from './staticPages/estates';
+import About from './staticPages/about';
+import Blog from './staticPages/blog';
+import Contact from './staticPages/contact';
 
 
 
 
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.logOut = this.logOut.bind(this);
+    this.logOutVet = this.logOutVet.bind(this);
 
     this.state = {
       showModeratorBoard: false,
@@ -61,25 +70,40 @@ class App extends Component {
     AuthService.logout();
   }
 
+  logOutVet() {
+    AuthVetService.logout();
+  }
+
   render() {
     return (
       <div className="app-container">
         <div className="content-wrap">
-          <NavBar />
+          <NavBar  />
 
-          <div className="">
+          <div className="mb-3">
             <Switch>
               
               <Route exact path="/doctors" component={Home}/>
+              <Route path="/doctors/:name?/:address?/:rate?" component={FilteredDoctors}/>
               <Route exact path="/login" component={Login} />
               <Route exact path="/login/doctor" component={LoginVet} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/register/doctor" component={RegisterVet} />
-              <Route exact path="/profile" component={Profile} />
-              <Route path="/profile/doctor" component={VetProfile} />
+              <Route path="/profile/" component={Profile} />
+              <Route path="/vet/" component={VetProfile} />
               <Route exact path={["/", "/home"]} component={MainHome} />
               <Route path="/docInfo/:_id" component={Docinfo} />
-              {/* <Route path="/user" component={BoardUser} /> */}
+              <Route exact path="/cats" component={Cats} />
+              <Route exact path="/dogs" component={Dogs} />
+              <Route exact path="/birds" component={Brids} />
+              <Route exact path="/estates" component={Estates} />
+              <Route exact path="/about" component={About} />
+              <Route exact path="/team" component={Blog} />
+              <Route exact path="/contact" component={Contact} />
+
+              <Route path="*" render={()=>{
+                return (<div className="container" style={{height:'60vh'}}><div className="alert alert-danger my-5 text-center"> <h1><strong className="text-danger d-block"> 404</strong> Not Found</h1> </div></div>)
+              }}/>
             </Switch>
           </div>
         </div>

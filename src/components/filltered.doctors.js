@@ -1,64 +1,72 @@
 import React, { Component } from "react";
 import Card from './doctor.card';
 import axios from "axios";
+import queryString from 'query-string';
 
-export default class Home extends Component {
+
+export default class FilteredDoctors extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       content: "",
-
-      doctors: []
+      selectedDoctors: [],
+      loading: true,
     };
   }
-  async componentDidMount() {
-    let { data } = await axios.get(
-      "https://pet-care-iti.herokuapp.com/api/doctors"
-    );
 
-    this.setState({ doctors: data.data });
-  }
-
-  renderDoctor({ doctors }) { 
-    
-    // console.log(this.props.userToken)
-    if (doctors && doctors.length) {
-
-      return doctors.map((doctor) => {
-        return <Card doctor={doctor} key={doctor._id}/>
-
-      })
+async componentDidMount() {
+  // console.log(this.props.location)
+  // console.log(this.props.location.pathname)
+  const split=this.props.location.pathname.slice(9)
+  // console.log(split)
+  const qs=queryString.parse(split)
+  // console.log(qs.name)
+  // console.log(qs.address)
+  // console.log(qs)
      
-    }
-    return <div className="alart alart-danger">No Doctors</div>
+      if(qs.name && qs.address){
+        let { data } = await axios.get(`https://pet-care-iti.herokuapp.com/api/doctors?name=${qs.name}&address=${qs.address}&rate=${qs.rate}`
+                );
+        // console.log(data)
+        this.setState({ selectedDoctors: data.data ,loading: false});
+        // console.log(this.state.selectedDoctors)
+      }else if(qs.name && !qs.address){
+        let { data } = await axios.get(`https://pet-care-iti.herokuapp.com/api/doctors?name=${qs.name}&rate=${qs.rate}`
+        );
+        // console.log(data)
+        this.setState({ selectedDoctors: data.data ,loading: false});
+        // console.log(this.state.selectedDoctors)
+      }else if(qs.address&& !qs.name){
+        let { data } = await axios.get(`https://pet-care-iti.herokuapp.com/api/doctors?address=${qs.address}&rate=${qs.rate}`
+        );
+        console.log(data)
+        this.setState({ selectedDoctors: data.data ,loading: false});
+        // console.log(this.state.selectedDoctors)
+      }else{
+         let { data } = await axios.get(`https://pet-care-iti.herokuapp.com/api/doctors`)
+         this.setState({ selectedDoctors: data.data ,loading: false});
+      }     
+}
+
+  renderDoctor() {
+    if (this.state.selectedDoctors.length>0) {
+    return this.state.selectedDoctors.map((doctor) => {
+      return <Card doctor={doctor} key={doctor._id} />
+      })
+    }else{
+   
+   return  (  <div className="alert alert-danger">No Matching Result</div>)
   }
-
-
-  // componentDidMount() {
-  //   UserService.getUserBoard().then(
-  //     response => {
-  //       this.setState({
-  //         content: response.data
-  //       });
-  //     },
-  //     error => {
-  //       this.setState({
-  //         content:
-  //           (error.response && error.response.data) ||
-  //           error.message ||
-  //           error.toString()
-  //       });
-  //     }
-  //   );
-  // }
+  }
 
   render() {
     return (
       <div className="container">
-
         <section className="jumbotron">
-          <h5 className="text-dark p-2 text-center">Top Rated Vets</h5>
+        {!this.state.loading && (
+           <h5 className="text-dark00 text-center">Top Rated Vets</h5>
+        )}
           <div className="row">
             <div className="col-lg-3 card bg-light py-3">
               <h4 className="text-info text-center">Filter</h4>
@@ -266,20 +274,29 @@ export default class Home extends Component {
              
               </div>
             </div>
+            
+            
             <div className="col-lg-9">
-              {this.renderDoctor(this.state)}
-
-              <div>
-
+            <div
+                className="d-flex justify-content-center"
+                disabled={this.state.loading}
+              >
+                {this.state.loading && (
+                  
+                  <span className="spinner-border spinner-border-sm  text-secondary"></span>
+                )}
+               
               </div>
+
+              {this.renderDoctor(this.state)}
+        
             </div>
 
 
           </div>
-
-          {/* <h3>{this.state.content}</h3> */}
         </section>
       </div>
+    
     );
   }
 }
